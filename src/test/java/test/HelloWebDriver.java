@@ -47,7 +47,7 @@ public class HelloWebDriver {
          Assert.assertEquals(driver.getTitle(),"webQUIK 7.6.2");
     }
     @Test(description = "Create new ticket")
-    public  void main() throws InterruptedException {
+    public  void createNewTicket() throws InterruptedException {
         loginPage = new LoginPage(driver);
         loginPage.init();
         loginPage.singIntoSystemAsUser("U0191767","06258");
