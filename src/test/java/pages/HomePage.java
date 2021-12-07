@@ -1,7 +1,6 @@
 package pages;
 
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -55,6 +54,8 @@ public class HomePage {
 
     @FindBy(xpath = "//*[@id=\"displayfield-2470-inputEl\"]")
     private WebElement sumOfTransactionAfterSubmit;
+    @FindBy(xpath = "//*[@id=\"button-2232-btnIconEl\"]")
+    private WebElement changeTypeOfTicketToMarketable;
 
     public HomePage(WebDriver driver) {
         this.driver=driver;
@@ -64,13 +65,33 @@ public class HomePage {
         PageFactory.initElements(driver, this);
     }
 
-    public void createNewTicket(String nameOfLot,int countOfLots,int costPerInstruments) {
+    public void createNewTicketWithlimits(String nameOfLot, String countOfLots, String costPerInstruments) {
         try {
             newTicketButton.click();
             tradeNumber.sendKeys(Keys.ARROW_DOWN + "\n");
             inputNameOfLot.sendKeys(nameOfLot);
-            numberOfLotsToBuy.sendKeys("5");
+            numberOfLotsToBuy.sendKeys(countOfLots);
             costForInstrument.sendKeys("1");
+            submitTicketButton.click();
+            sendTicketButton.click();
+
+            Assert.assertEquals(clientsCode.getText(), clientsCodeAfterSubmitTicket.getText());
+            Assert.assertEquals(tradeNumber.getText(), tradeNumberAfterSubmitTicket.getText());
+            Assert.assertEquals(nameOfLot, nameOfLotAfterSubmit.getText());
+            Assert.assertEquals(sumOfTransactionBeforeSubmit.getText(), sumOfTransactionAfterSubmit.getText());
+        }
+        catch (Exception e){
+            Logger logger = Logger.getLogger(HomePage.class.getName());
+            logger.log(Level.INFO,e.getMessage());
+        }
+    }
+    public void createNewTicketWithMarket(String nameOfLot, String countOfLots) {
+        try {
+            newTicketButton.click();
+            tradeNumber.sendKeys(Keys.ARROW_DOWN + "\n");
+            inputNameOfLot.sendKeys(nameOfLot);
+            numberOfLotsToBuy.sendKeys(countOfLots);
+            changeTypeOfTicketToMarketable.click();
             submitTicketButton.click();
             sendTicketButton.click();
 

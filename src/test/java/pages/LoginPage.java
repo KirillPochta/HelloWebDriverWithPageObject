@@ -16,7 +16,11 @@ import java.util.logging.Logger;
 
 public class LoginPage {
     private WebDriver driver;
-
+/*
+    private WebElement loginFiled = driver.findElement(By.xpath("//*[@id=\"textfield-1015-inputEl\"]"));
+    private WebElement passwordField = driver.findElement(By.xpath("//*[@id=\"textfield-1017-inputEl\"]"));
+    private WebElement signButton = driver.findElement(By.xpath("//*[@id=\"button-1021-btnIconEl\"]"));
+*/
     @FindBy(xpath = "//*[@id=\"textfield-1015-inputEl\"]")
     private WebElement loginFiled;
 
@@ -34,16 +38,13 @@ public class LoginPage {
         PageFactory.initElements(driver, this);
     }
     public void singIntoSystemAsUser(String login,String password) {
-        try {
+
             Logger logger = Logger.getLogger(LoginPage.class.getName());
             logger.log(Level.INFO,"zdes");
             loginFiled.sendKeys(login);
             passwordField.sendKeys(password);
             signButton.click();
-        }
-        catch (Exception e){
-            Logger logger = Logger.getLogger(LoginPage.class.getName());
-            logger.log(Level.INFO,e.getMessage());
-        }
+
+
     }
 }
