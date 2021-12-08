@@ -4,23 +4,28 @@ import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.LoginPage;
-
 import java.util.concurrent.TimeUnit;
 
 
 public class HelloWebDriver {
+
     private WebDriver driver;
     private ChromeOptions options;
-    private LoginPage loginPage;
+    private LoginPage loginPageObj;
     private HomePage homePage;
+    private WebDriverWait wait;
 
     @BeforeMethod(alwaysRun = true)
     public void browserSetup() {
+        System.out.println("test2");
+
         options = new ChromeOptions();
         options.setPageLoadStrategy(PageLoadStrategy.NONE);
         options.addArguments("start-maximized");
@@ -36,47 +41,53 @@ public class HelloWebDriver {
 
         System.setProperty("webdriver.chrome.driver", "chromedriver.exe");
         driver.get("https://junior.webquik.ru/");
-
+        wait = new WebDriverWait(driver,10);
     }
-    @Test(description = "Sign into account")
+    @Test
     public  void signIntoSystem() throws InterruptedException {
-         loginPage = new LoginPage(driver);
-         loginPage.init();
-         loginPage.singIntoSystemAsUser("U0191767","06258");
-         Thread.sleep(5000);
-         Assert.assertEquals(driver.getTitle(),"webQUIK 7.6.2");
+
+        wait.until(ExpectedConditions.presenceOfElementLocated
+                (By.id("textfield-1015-inputEl")));
+        wait.until(ExpectedConditions.presenceOfElementLocated
+                (By.id("textfield-1017-inputEl")));
+        wait.until(ExpectedConditions.presenceOfElementLocated
+                (By.id("button-1021-btnIconEl")));
+        loginPageObj = new LoginPage(driver);
+
+        loginPageObj.singIntoSystemAsUser("U0191767","06258");
+        Assert.assertEquals(driver.getTitle(),"webQUIK 7.6.2");
     }
-    @Test(description = "Create new ticket with limits")
+
+    @Test
     public  void createNewTicketWithLimits() throws InterruptedException {
-        loginPage = new LoginPage(driver);
-        Thread.sleep(5000);
-        loginPage.init();
-        loginPage.singIntoSystemAsUser("U0191767","06258");
+        wait.until(ExpectedConditions.presenceOfElementLocated
+                (By.xpath("//*[@id=\"textfield-1015-inputEl\"]")));
+        wait.until(ExpectedConditions.presenceOfElementLocated
+                (By.xpath("//*[@id=\"textfield-1017-inputEl\"]")));
+        wait.until(ExpectedConditions.presenceOfElementLocated
+                (By.xpath("//*[@id=\"button-1021-btnIconEl\"]")));
+        loginPageObj = new LoginPage(driver);
+        loginPageObj.singIntoSystemAsUser("U0191767","06258");
 
         Thread.sleep(5000);
         Assert.assertEquals(driver.getTitle(),"webQUIK 7.6.2");
 
-        homePage = new HomePage(driver);
-        homePage.init();
         homePage.createNewTicketWithlimits("CNYRUB_SPT","5","1");
     }
-    @Test(description = "Create new ticket with marketable price")
+    @Test
     public  void createNewTicketWithMarketablePrice() throws InterruptedException {
-        loginPage = new LoginPage(driver);
         Thread.sleep(5000);
-        loginPage.init();
-        loginPage.singIntoSystemAsUser("U0191767","06258");
+        loginPageObj.singIntoSystemAsUser("U0191767","06258");
 
         Thread.sleep(5000);
         Assert.assertEquals(driver.getTitle(),"webQUIK 7.6.2");
 
-        homePage = new HomePage(driver);
-        homePage.init();
         homePage.createNewTicketWithMarket("CHMF","5");
     }
     @AfterMethod(alwaysRun = true)
     public void closeBrowser() {
         driver.quit();
+        driver = null;
     }
 }
 

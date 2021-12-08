@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
@@ -11,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class HomePage {
-    private WebDriver driver;
+    private WebDriver driver = new ChromeDriver();
 
     @FindBy(xpath = "//*[@id=\"button-1050-btnIconEl\"]")
     private WebElement newTicketButton;
@@ -59,10 +60,8 @@ public class HomePage {
 
     public HomePage(WebDriver driver) {
         this.driver=driver;
-    }
-
-    public void init(){
         PageFactory.initElements(driver, this);
+
     }
 
     public void createNewTicketWithlimits(String nameOfLot, String countOfLots, String costPerInstruments) {
@@ -86,7 +85,6 @@ public class HomePage {
         }
     }
     public void createNewTicketWithMarket(String nameOfLot, String countOfLots) {
-        try {
             newTicketButton.click();
             tradeNumber.sendKeys(Keys.ARROW_DOWN + "\n");
             inputNameOfLot.sendKeys(nameOfLot);
@@ -99,10 +97,6 @@ public class HomePage {
             Assert.assertEquals(tradeNumber.getText(), tradeNumberAfterSubmitTicket.getText());
             Assert.assertEquals(nameOfLot, nameOfLotAfterSubmit.getText());
             Assert.assertEquals(sumOfTransactionBeforeSubmit.getText(), sumOfTransactionAfterSubmit.getText());
-        }
-        catch (Exception e){
-            Logger logger = Logger.getLogger(HomePage.class.getName());
-            logger.log(Level.INFO,e.getMessage());
-        }
+       }
     }
-}
+
